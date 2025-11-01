@@ -41,7 +41,6 @@
         <th>Patient</th>
         <th>Procedure</th>
         <th>Status</th>
-        <th>Action</th>
       </tr>
     </thead>
     <tbody></tbody>
@@ -74,13 +73,6 @@ function addConsent() {
   document.getElementById("procedure").value = "";
 }
 
-function updateStatus(index, newStatus) {
-  let consents = JSON.parse(localStorage.getItem("consentRequests")) || [];
-  consents[index].status = newStatus;
-  localStorage.setItem("consentRequests", JSON.stringify(consents));
-  showConsents();
-}
-
 function showConsents() {
   const tableBody = document.querySelector("#consentTable tbody");
   tableBody.innerHTML = "";
@@ -88,23 +80,13 @@ function showConsents() {
   let myConsents = consents.filter(c => c.doctorUsername === currentUser.username);
 
   if (myConsents.length === 0) {
-    tableBody.innerHTML = "<tr><td colspan='4'>No consent requests yet.</td></tr>";
+    tableBody.innerHTML = "<tr><td colspan='3'>No consent requests yet.</td></tr>";
     return;
   }
 
-  myConsents.forEach((c, idx) => {
+  myConsents.forEach((c) => {
     const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${c.patientUsername}</td>
-      <td>${c.procedure}</td>
-      <td>${c.status}</td>
-      <td>
-        ${c.status === "Pending" ? `
-        <button onclick="updateStatus(${idx}, 'Approved')">Approve</button>
-        <button onclick="updateStatus(${idx}, 'Rejected')">Reject</button>
-        ` : '-'}
-      </td>
-    `;
+    row.innerHTML = `<td>${c.patientUsername}</td><td>${c.procedure}</td><td>${c.status}</td>`;
     tableBody.appendChild(row);
   });
 }
