@@ -1,130 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Consent Form | KIIT Care Hospital</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #00b4d8, #48cae4, #90e0ef);
-      background-size: 400% 400%;
-      animation: gradientAnimation 10s ease infinite;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-
-    @keyframes gradientAnimation {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    header {
-      background: rgba(255,255,255,0.9);
-      padding: 15px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }
-
-    header h1 { color: #0077b6; }
-
-    video {
-      display: block;
-      width: 100%;
-      border-radius: 10px;
-      margin-top: 15px;
-    }
-
-    .container {
-      flex-grow: 1;
-      padding: 30px 50px;
-    }
-
-    h2 {
-      text-align: center;
-      color: #0077b6;
-    }
-
-    textarea {
-      width: 100%;
-      height: 150px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      margin-top: 10px;
-      padding: 10px;
-      font-size: 15px;
-    }
-
-    canvas {
-      border: 2px solid #0077b6;
-      border-radius: 8px;
-      width: 100%;
-      height: 200px;
-      margin-top: 10px;
-      background: #fff;
-    }
-
-    button {
-      margin-top: 20px;
-      background: #0077b6;
-      color: white;
-      padding: 12px;
-      width: 100%;
-      border: none;
-      border-radius: 8px;
-      font-size: 18px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #0096c7;
-      transform: scale(1.05);
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consent Form | KIIT Care Hospital</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+body { margin:0; font-family:'Poppins',sans-serif; background:linear-gradient(135deg,#00b4d8,#48cae4,#90e0ef); background-size:400% 400%; animation:gradientAnim 10s ease infinite; display:flex; flex-direction:column; min-height:100vh;}
+@keyframes gradientAnim {0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+header { background: rgba(255,255,255,0.9); padding:15px 40px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 4px 10px rgba(0,0,0,0.2);}
+header h1 { color:#0077b6; }
+header a { text-decoration:none; background:#caf0f8; padding:8px 15px; border-radius:8px; color:#0077b6; font-weight:bold;}
+.container { flex-grow:1; padding:30px 50px; max-width:900px; margin:auto; background:rgba(255,255,255,0.95); border-radius:15px; box-shadow:0 4px 20px rgba(0,0,0,0.2);}
+h2 { text-align:center; color:#0077b6;}
+video,audio { display:block; width:100%; margin-top:15px; border-radius:10px;}
+textarea { width:100%; height:150px; border-radius:8px; border:1px solid #ccc; margin-top:10px; padding:10px; font-size:15px;}
+canvas { border:2px solid #0077b6; border-radius:8px; width:100%; height:200px; margin-top:10px; background:#fff;}
+button { margin-top:20px; background:#0077b6; color:white; padding:12px; width:100%; border:none; border-radius:8px; font-size:18px; cursor:pointer;}
+button:hover { background:#0096c7; transform:scale(1.05);}
+.language-selector { margin-top:10px; text-align:center;}
+.language-selector button { width:auto; margin:5px; padding:6px 12px; }
+</style>
 </head>
 <body>
-  <header>
-    <h1>🩺 Consent Form</h1>
-    <a href="dashboard.html">⬅ Back</a>
-  </header>
 
-  <div class="container">
-    <h2>Operation Consent Form</h2>
-    <video controls>
-      <source src="https://cdn.pixabay.com/vimeo/345861238/hospital-20861.mp4?width=640&hash=2b3a1441c43c1efc99ad96d21e67c8c49b50e8d2" type="video/mp4">
-    </video>
-    <audio controls style="width:100%;margin-top:15px;">
-      <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
-    </audio>
+<header>
+<h1>🩺 Consent Form</h1>
+<a href="patient_dashboard.html">⬅ Back</a>
+</header>
 
-    <label style="margin-top:20px;display:block;color:#0077b6;font-weight:bold;">Consent Details:</label>
-    <textarea readonly>
-I, the undersigned patient, consent to undergo the operation described above after being fully informed about the procedure, risks, benefits, and alternatives.
-    </textarea>
+<div class="container">
+<h2>Operation Consent Form</h2>
 
-    <label style="margin-top:20px;display:block;color:#0077b6;font-weight:bold;">Signature:</label>
-    <canvas id="signature"></canvas>
-    <button onclick="clearCanvas()">Clear Signature</button>
-    <button onclick="alert('Consent Form Saved Successfully!')">Submit & Save</button>
-  </div>
+<video id="opVideo" controls></video>
 
-  <script>
-    const canvas = document.getElementById('signature');
-    const ctx = canvas.getContext('2d');
-    let drawing = false;
+<div class="language-selector">
+<button onclick="setLanguage('audioEng')">English</button>
+<button onclick="setLanguage('audioOdia')">Odia</button>
+<button onclick="setLanguage('audioHindi')">Hindi</button>
+</div>
 
-    canvas.addEventListener('mousedown', e => { drawing = true; ctx.moveTo(e.offsetX, e.offsetY); });
-    canvas.addEventListener('mousemove', e => { if (drawing) { ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); }});
-    canvas.addEventListener('mouseup', () => drawing = false);
+<audio id="consentAudio" controls></audio>
 
-    function clearCanvas() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-  </script>
+<label style="margin-top:20px;display:block;color:#0077b6;font-weight:bold;">Consent Details:</label>
+<textarea readonly></textarea>
+
+<label style="margin-top:20px;display:block;color:#0077b6;font-weight:bold;">Signature:</label>
+<canvas id="signature"></canvas>
+<button onclick="clearCanvas()">Clear Signature</button>
+<button onclick="saveConsent()">Submit & Save</button>
+</div>
+
+<script>
+let currentUser=JSON.parse(localStorage.getItem("currentUser"));
+if(!currentUser || currentUser.role!=="patient"){ alert("Access denied."); window.location.href="index.html"; }
+
+let index=localStorage.getItem("currentConsentIndex");
+if(index===null){ alert("No consent selected."); window.location.href="patient_dashboard.html"; }
+
+let consents=JSON.parse(localStorage.getItem("consentRequests"))||[];
+let consent=consents[index];
+
+document.querySelector("textarea").value=`I, the undersigned patient, consent to undergo the operation: ${consent.procedure} after being fully informed about procedure, risks, benefits and alternatives.`;
+document.getElementById("opVideo").src=consent.video;
+
+const audioPlayer=document.getElementById("consentAudio");
+function setLanguage(lang){ audioPlayer.src=consent[lang]; audioPlayer.play(); }
+
+const canvas=document.getElementById('signature');
+const ctx=canvas.getContext('2d');
+let drawing=false;
+canvas.addEventListener('mousedown', e=>{ drawing=true; ctx.moveTo(e.offsetX,e.offsetY); });
+canvas.addEventListener('mousemove', e=>{ if(drawing){ ctx.lineTo(e.offsetX,e.offsetY); ctx.stroke(); }});
+canvas.addEventListener('mouseup', ()=>drawing=false);
+
+function clearCanvas(){ ctx.clearRect(0,0,canvas.width,canvas.height); }
+
+function saveConsent(){
+  consents[index].status="Approved";
+  consents[index].signature=canvas.toDataURL();
+  localStorage.setItem("consentRequests",JSON.stringify(consents));
+  alert("Consent saved successfully!");
+  window.location.href="patient_dashboard.html";
+}
+</script>
 </body>
 </html>
