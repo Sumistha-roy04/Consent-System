@@ -5,35 +5,39 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Patient Dashboard | KIIT Care Hospital</title>
 <style>
-  body { font-family:'Poppins',sans-serif; margin:0; background:linear-gradient(135deg,#48cae4,#90e0ef,#ade8f4); background-size:400% 400%; animation:bgMove 10s ease infinite;}
-  @keyframes bgMove {0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%}}
-  header { background:white; padding:15px 40px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 4px 10px rgba(0,0,0,0.2);}
-  header h1 { color:#0077b6; }
-  header a { text-decoration:none; background:#caf0f8; padding:8px 15px; border-radius:8px; color:#0077b6; font-weight:bold;}
-  .container { max-width:800px; margin:40px auto; background: rgba(255,255,255,0.95); padding:30px; border-radius:15px; box-shadow:0 4px 20px rgba(0,0,0,0.2);}
-  table { width:100%; border-collapse:collapse; margin-top:20px;}
-  th,td { border:1px solid #ccc; padding:10px; text-align:left;}
-  th { background:#0077b6; color:white;}
+body { font-family:'Poppins',sans-serif; margin:0; background:linear-gradient(135deg,#48cae4,#90e0ef,#ade8f4); background-size:400% 400%; animation:bgMove 10s ease infinite;}
+@keyframes bgMove {0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%}}
+header { background:white; padding:15px 40px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 4px 10px rgba(0,0,0,0.2);}
+header h1 { color:#0077b6; }
+header a { text-decoration:none; background:#caf0f8; padding:8px 15px; border-radius:8px; color:#0077b6; font-weight:bold;}
+.container { max-width:800px; margin:40px auto; background: rgba(255,255,255,0.95); padding:30px; border-radius:15px; box-shadow:0 4px 20px rgba(0,0,0,0.2);}
+table { width:100%; border-collapse:collapse; margin-top:20px;}
+th,td { border:1px solid #ccc; padding:10px; text-align:left;}
+th { background:#0077b6; color:white;}
+button { margin:2px; padding:4px 8px; border:none; border-radius:5px; cursor:pointer;}
+button.approve { background:green; color:white;}
+button.reject { background:red; color:white;}
 </style>
 </head>
 <body>
 
 <header>
-  <h1>🩺 Patient Dashboard</h1>
-  <a href="index.html" onclick="logout()">Logout</a>
+<h1>🩺 Patient Dashboard</h1>
+<a href="index.html" onclick="logout()">Logout</a>
 </header>
 
 <div class="container">
-  <h2>Your Consent Requests</h2>
-  <table id="consentTable">
-    <thead>
-      <tr>
-        <th>Procedure</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+<h2>Your Consent Requests</h2>
+<table id="consentTable">
+  <thead>
+    <tr>
+      <th>Procedure</th>
+      <th>Status</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
 </div>
 
 <script>
@@ -45,6 +49,16 @@ if (!currentUser || currentUser.role !== "patient") {
 
 function logout() { localStorage.removeItem("currentUser"); }
 
+function approve(index) { updateStatus(index, "Approved"); }
+function reject(index) { updateStatus(index, "Rejected"); }
+
+function updateStatus(index, status) {
+  let consents = JSON.parse(localStorage.getItem("consentRequests")) || [];
+  consents[index].status = status;
+  localStorage.setItem("consentRequests", JSON.stringify(consents));
+  showConsents();
+}
+
 function showConsents() {
   const tableBody = document.querySelector("#consentTable tbody");
   tableBody.innerHTML = "";
@@ -52,23 +66,22 @@ function showConsents() {
   let myConsents = consents.filter(c => c.patientUsername === currentUser.username);
 
   if (myConsents.length === 0) {
-    tableBody.innerHTML = "<tr><td colspan='2'>No consent requests yet.</td></tr>";
+    tableBody.innerHTML = "<tr><td colspan='3'>No consent requests yet.</td></tr>";
     return;
   }
 
-  myConsents.forEach(c => {
+  myConsents.forEach((c, idx) => {
     const row = document.createElement("tr");
-    row.innerHTML = `<td>${c.procedure}</td><td>${c.status}</td>`;
+    row.innerHTML = `
+      <td>${c.procedure}</td>
+      <td>${c.status}</td>
+      <td>
+        ${c.status === "Pending" ? `<button class="approve" onclick="approve(${idx})">Approve</button>
+                                    <button class="reject" onclick="reject(${idx})">Reject</button>` : '-'}
+      </td>
+    `;
     tableBody.appendChild(row);
   });
 }
 
-// Refresh every 2 seconds to reflect doctor updates
-window.onload = () => {
-  showConsents();
-  setInterval(showConsents, 2000);
-};
-</script>
-
-</body>
-</html>
+window.onload = () => { showConsents(); setInterval(showConsents, 2000
