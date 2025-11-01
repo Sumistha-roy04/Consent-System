@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doctor Dashboard | KIIT Care Hospital</title>
+<style>
+  body { font-family: 'Poppins', sans-serif; margin: 0; background: linear-gradient(135deg,#00b4d8,#48cae4,#90e0ef); background-size:400% 400%; animation:bgMove 10s ease infinite; }
+  @keyframes bgMove { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+  header { background:white; padding:15px 40px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 4px 10px rgba(0,0,0,0.2);}
+  header h1 { color:#0077b6; }
+  header a { text-decoration:none; background:#caf0f8; padding:8px 15px; border-radius:8px; color:#0077b6; font-weight:bold;}
+  .container { max-width:800px; margin:40px auto; background: rgba(255,255,255,0.95); padding:30px; border-radius:15px; box-shadow:0 4px 20px rgba(0,0,0,0.2);}
+  input,textarea { width:100%; padding:10px; margin-top:8px; border-radius:8px; border:1px solid #ccc;}
+  button { margin-top:10px; padding:6px 12px; background:#0077b6; color:white; border:none; border-radius:8px; cursor:pointer;}
+  button:hover { background:#0096c7; }
+  table { width:100%; margin-top:20px; border-collapse:collapse;}
+  th,td { border:1px solid #ccc; padding:10px; text-align:left;}
+  th { background:#0077b6; color:white;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>👨‍⚕️ Doctor Dashboard</h1>
+  <a href="index.html" onclick="logout()">Logout</a>
+</header>
+
+<div class="container">
+  <h2>Add Consent Request</h2>
+  <label>Patient Username:</label>
+  <input type="text" id="patientName" placeholder="Enter patient username">
+  <label>Procedure:</label>
+  <textarea id="procedure" placeholder="Enter procedure details"></textarea>
+  <button onclick="addConsent()">Add Consent Request</button>
+
+  <h2>My Patients' Consent Requests</h2>
+  <table id="consentTable">
+    <thead>
+      <tr>
+        <th>Patient</th>
+        <th>Procedure</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<script>
+let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+if (!currentUser || currentUser.role !== "doctor") {
+  alert("Access denied. Please login as doctor.");
+  window.location.href = "index.html";
+}
+
+function logout() { localStorage.removeItem("currentUser"); }
+
+function addConsent() {
+  const patientUsername = document.getElementById("patientName").value.trim();
+  const procedure = document.getElementById("procedure").value.trim();
+  if (!patientUsername || !procedure) { alert("Fill both fields!"); return; }
+
+  const patients = JSON.parse(localStorage.getItem("patients")) || [];
+  const patient = patients.find(p => p.username === patientUsername && p.doctorUsername === currentUser.username);
+  if (!patient) { alert("Patient not found or not assigned to you."); return; }
+
+  let consents = JSON.parse(localStorage.getItem("consentRequests")) || [];
+  consents.push({ patientUsername, procedure, status:"Pending", doctorUsername: currentUser.username });
+  localStorage.setItem("consentRequests", JSON.stringify(consents));
+  showConsents();
+  document.getElementById("patientName").value = "";
+  document.getElementById("procedure").value = "";
+}
+
+function updateStatus(index, newStatus) {
+  let consents = JSON.parse(localStorage.getItem("consentRequests")) || [];
+  consents[index].status = newStatus;
+  localStorage.setItem("consentRequests", JSON.stringify(consents));
+  showConsents();
+}
+
+function showConsents() {
+  const tableBody = document.querySelector("#consentTable tbody");
+  tableBody.innerHTML = "";
+  let consents = JSON.parse(localStorage.getItem("consentRequests")) || [];
+  let myConsents = consents.filter(c => c.doctorUsername === currentUser.username);
+
+  if (myConsents.length === 0) {
+    tableBody.innerHTML = "<tr><td colspan='4'>No consent requests yet.</td></tr>";
+    return;
+  }
+
+  myConsents.forEach((c, idx) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${c.patientUsername}</td>
+      <td>${c.procedure}</td>
+      <td>${c.status}</td>
+      <td>
+        ${c.status === "Pending" ? `
+        <button onclick="updateStatus(${idx}, 'Approved')">Approve</button>
+        <button onclick="updateStatus(${idx}, 'Rejected')">Reject</button>
+        ` : '-'}
+      </td>
+    `;
+    tableBody.appendChild(row);
+  });
+}
+
+window.onload = showConsents;
+</script>
+
+</body>
+</html>
