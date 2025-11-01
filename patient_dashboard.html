@@ -1,265 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Patient Dashboard | KIIT Care Hospital</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #48cae4, #90e0ef, #ade8f4);
-      background-size: 400% 400%;
-      animation: bgMove 10s ease infinite;
-    }
-    @keyframes bgMove {
-      0% {background-position: 0% 50%;}
-      50% {background-position: 100% 50%;}
-      100% {background-position: 0% 50%;}
-    }
-
-    header {
-      background-color: rgba(255, 255, 255, 0.9);
-      padding: 15px 40px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    header h1 { color: #0077b6; }
-    header a {
-      text-decoration: none;
-      background: #caf0f8;
-      padding: 8px 15px;
-      border-radius: 8px;
-      color: #0077b6;
-      font-weight: bold;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 40px auto;
-      background: rgba(255,255,255,0.95);
-      padding: 40px;
-      border-radius: 15px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    }
-
-    h2, h3 {
-      color: #0077b6;
-      text-align: center;
-    }
-
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-      color: #0077b6;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 10px;
-      margin-top: 8px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 15px;
-    }
-
-    button {
-      margin-top: 20px;
-      padding: 12px;
-      background: #0077b6;
-      color: white;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      width: 100%;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    button:hover { background: #0096c7; transform: scale(1.03); }
-
-    video, audio {
-      width: 100%;
-      border-radius: 12px;
-      margin-top: 20px;
-    }
-
-    /* Language selection screen */
-    #language-screen {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      text-align: center;
-    }
-
-    .language-card {
-      background: rgba(255, 255, 255, 0.95);
-      padding: 40px 50px;
-      border-radius: 20px;
-      box-shadow: 0 4px 25px rgba(0,0,0,0.2);
-      text-align: center;
-      animation: fadeIn 1s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .language-card h2 {
-      color: #023e8a;
-      margin-bottom: 25px;
-    }
-
-    .lang-btn {
-      background: #0077b6;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 10px;
-      margin: 8px;
-      width: 150px;
-      cursor: pointer;
-      transition: 0.25s ease;
-    }
-
-    .lang-btn:hover {
-      background: #0096c7;
-      transform: translateY(-3px);
-      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
-    }
-
-    .lang-btn:active {
-      transform: scale(0.97);
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patient Dashboard | KIIT Care Hospital</title>
+<style>
+  body { font-family:'Poppins',sans-serif; margin:0; background:linear-gradient(135deg,#48cae4,#90e0ef,#ade8f4); background-size:400% 400%; animation:bgMove 10s ease infinite;}
+  @keyframes bgMove {0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%}}
+  header { background:white; padding:15px 40px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 4px 10px rgba(0,0,0,0.2);}
+  header h1 { color:#0077b6; }
+  header a { text-decoration:none; background:#caf0f8; padding:8px 15px; border-radius:8px; color:#0077b6; font-weight:bold;}
+  .container { max-width:800px; margin:40px auto; background: rgba(255,255,255,0.95); padding:30px; border-radius:15px; box-shadow:0 4px 20px rgba(0,0,0,0.2);}
+  table { width:100%; border-collapse:collapse; margin-top:20px;}
+  th,td { border:1px solid #ccc; padding:10px; text-align:left;}
+  th { background:#0077b6; color:white;}
+</style>
 </head>
 <body>
 
-<!-- Language selection screen -->
-<div id="language-screen">
-  <div class="language-card">
-    <h2>🌐 Choose Your Preferred Language</h2>
-    <div>
-      <button class="lang-btn" onclick="setLanguage('en')">English</button>
-      <button class="lang-btn" onclick="setLanguage('hi')">हिन्दी</button>
-      <button class="lang-btn" onclick="setLanguage('od')">ଓଡ଼ିଆ</button>
-    </div>
-  </div>
-</div>
+<header>
+  <h1>🩺 Patient Dashboard</h1>
+  <a href="index.html" onclick="logout()">Logout</a>
+</header>
 
-<!-- Dashboard -->
-<div id="dashboard" style="display:none;">
-  <header>
-    <h1 id="title">🩺 KIIT Care Hospital Dashboard</h1>
-    <a href="index.html" id="logout">Logout</a>
-  </header>
-
-  <div class="container">
-    <h2 id="form-title">Patient Details & Consent Form</h2>
-    <form>
-      <label id="pname-label">Patient Name:</label>
-      <input type="text" placeholder="Enter full name" required>
-
-      <label id="history-label">Past History:</label>
-      <textarea placeholder="Enter previous illnesses or conditions"></textarea>
-
-      <label id="meds-label">Medications:</label>
-      <textarea placeholder="List current medicines"></textarea>
-
-      <label id="advice-label">Doctor Advice:</label>
-      <textarea placeholder="Doctor's observations"></textarea>
-
-      <label id="operation-label">Operation Details:</label>
-      <textarea placeholder="Type of operation, date, etc."></textarea>
-
-      <h3 id="video-title">🎥 Procedure Overview Video:</h3>
-      <video controls>
-        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-      </video>
-
-      <h3 id="audio-title">🔊 Voice-over Explanation:</h3>
-      <audio controls>
-        <source src="https://www.w3schools.com/html/horse.mp3" type="audio/mpeg">
-      </audio>
-
-      <label id="sign-label">Signature:</label>
-      <input type="text" placeholder="Type your full name as signature">
-
-      <button type="submit" id="save-btn">Save to Dashboard</button>
-    </form>
-  </div>
+<div class="container">
+  <h2>Your Consent Requests</h2>
+  <table id="consentTable">
+    <thead>
+      <tr>
+        <th>Procedure</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 </div>
 
 <script>
-  const translations = {
-    en: {
-      title: "🩺 KIIT Care Hospital Dashboard",
-      logout: "Logout",
-      formTitle: "Patient Details & Consent Form",
-      pname: "Patient Name:",
-      history: "Past History:",
-      meds: "Medications:",
-      advice: "Doctor Advice:",
-      operation: "Operation Details:",
-      video: "🎥 Procedure Overview Video:",
-      audio: "🔊 Voice-over Explanation:",
-      sign: "Signature:",
-      save: "Save to Dashboard"
-    },
-    hi: {
-      title: "🩺 KIIT केयर अस्पताल डैशबोर्ड",
-      logout: "लॉगआउट",
-      formTitle: "रोगी विवरण और सहमति फ़ॉर्म",
-      pname: "रोगी का नाम:",
-      history: "पिछला इतिहास:",
-      meds: "दवाइयाँ:",
-      advice: "डॉक्टर की सलाह:",
-      operation: "ऑपरेशन विवरण:",
-      video: "🎥 प्रक्रिया का अवलोकन वीडियो:",
-      audio: "🔊 वॉयस-ओवर व्याख्या:",
-      sign: "हस्ताक्षर:",
-      save: "डैशबोर्ड में सहेजें"
-    },
-    od: {
-      title: "🩺 କିଆଇଆଇଟି କେୟାର ହସ୍ପିଟାଲ ଡ୍ୟାଶବୋର୍ଡ",
-      logout: "ଲଗ୍ ଆଉଟ୍",
-      formTitle: "ରୋଗୀ ବିବରଣୀ ଓ ସମ୍ମତି ଫର୍ମ",
-      pname: "ରୋଗୀର ନାମ:",
-      history: "ପୂର୍ବ ଇତିହାସ:",
-      meds: "ଔଷଧ:",
-      advice: "ଡାକ୍ତରଙ୍କ ପରାମର୍ଶ:",
-      operation: "ଅପରେସନ ବିବରଣୀ:",
-      video: "🎥 ପ୍ରକ୍ରିୟା ଭିଡିଓ ଅଭିଧାନ:",
-      audio: "🔊 ଭଏସ୍-ଓଭର ବିବରଣୀ:",
-      sign: "ସହି:",
-      save: "ଡ୍ୟାଶବୋର୍ଡକୁ ସେଭ୍ କରନ୍ତୁ"
-    }
-  };
+let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+if (!currentUser || currentUser.role !== "patient") {
+  alert("Access denied. Please login as patient.");
+  window.location.href = "index.html";
+}
 
-  function setLanguage(lang) {
-    const t = translations[lang];
-    document.getElementById("language-screen").style.display = "none";
-    document.getElementById("dashboard").style.display = "block";
+function logout() { localStorage.removeItem("currentUser"); }
 
-    document.getElementById("title").innerText = t.title;
-    document.getElementById("logout").innerText = t.logout;
-    document.getElementById("form-title").innerText = t.formTitle;
-    document.getElementById("pname-label").innerText = t.pname;
-    document.getElementById("history-label").innerText = t.history;
-    document.getElementById("meds-label").innerText = t.meds;
-    document.getElementById("advice-label").innerText = t.advice;
-    document.getElementById("operation-label").innerText = t.operation;
-    document.getElementById("video-title").innerText = t.video;
-    document.getElementById("audio-title").innerText = t.audio;
-    document.getElementById("sign-label").innerText = t.sign;
-    document.getElementById("save-btn").innerText = t.save;
+function showConsents() {
+  const tableBody = document.querySelector("#consentTable tbody");
+  tableBody.innerHTML = "";
+  let consents = JSON.parse(localStorage.getItem("consentRequests")) || [];
+  let myConsents = consents.filter(c => c.patientUsername === currentUser.username);
+
+  if (myConsents.length === 0) {
+    tableBody.innerHTML = "<tr><td colspan='2'>No consent requests yet.</td></tr>";
+    return;
   }
+
+  myConsents.forEach(c => {
+    const row = document.createElement("tr");
+    row.innerHTML = `<td>${c.procedure}</td><td>${c.status}</td>`;
+    tableBody.appendChild(row);
+  });
+}
+
+// Refresh every 2 seconds to reflect doctor updates
+window.onload = () => {
+  showConsents();
+  setInterval(showConsents, 2000);
+};
 </script>
 
 </body>
