@@ -1,132 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login | KIIT Care Hospital</title>
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      background: linear-gradient(135deg, #0077b6, #00b4d8, #90e0ef);
-      background-size: 400% 400%;
-      animation: gradient 8s ease infinite;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    @keyframes gradient {
-      0% {background-position: 0% 50%;}
-      50% {background-position: 100% 50%;}
-      100% {background-position: 0% 50%;}
-    }
-    .login-box {
-      background: rgba(255, 255, 255, 0.95);
-      padding: 40px;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      width: 350px;
-      text-align: center;
-      transition: all 0.3s ease;
-    }
-    h2 {
-      color: #0077b6;
-    }
-    input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      outline: none;
-      font-size: 15px;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      background-color: #0077b6;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    button:hover {
-      background-color: #0096c7;
-      transform: scale(1.05);
-    }
-    .role-btns {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
-    .role-btn {
-      flex: 1;
-      background-color: #00b4d8;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 10px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .role-btn:hover {
-      background-color: #0077b6;
-      transform: scale(1.05);
-    }
-    a {
-      text-decoration: none;
-      color: #0077b6;
-      font-weight: bold;
-      display: block;
-      margin-top: 10px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login | KIIT Care Hospital</title>
+<style>
+  body { font-family:'Poppins',sans-serif; margin:0; background:linear-gradient(135deg,#0077b6,#00b4d8,#90e0ef); background-size:400% 400%; animation:gradient 8s ease infinite; display:flex; justify-content:center; align-items:center; height:100vh; }
+  @keyframes gradient { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+  .box { background:rgba(255,255,255,0.95); padding:30px; border-radius:15px; box-shadow:0 4px 15px rgba(0,0,0,0.2); width:350px; text-align:center; }
+  h2 { color:#0077b6; margin-bottom:20px; }
+  button { padding:10px 20px; margin:10px; border:none; border-radius:8px; background:#0077b6; color:white; font-weight:bold; cursor:pointer; transition:0.3s; }
+  button:hover { background:#0096c7; transform:scale(1.05); }
+  input { width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; font-size:15px; }
+</style>
 </head>
 <body>
-  <div class="login-box" id="selectionBox">
-    <h2>Who are you?</h2>
-    <div class="role-btns">
-      <button class="role-btn" onclick="selectRole('doctor')">Doctor</button>
-      <button class="role-btn" onclick="selectRole('patient')">Patient</button>
-    </div>
-  </div>
 
-  <div class="login-box" id="loginBox" style="display:none;">
-    <h2 id="loginTitle">Login</h2>
-    <form onsubmit="return loginUser()">
-      <input type="text" id="username" placeholder="Enter Username" required>
-      <input type="password" id="password" placeholder="Enter Password" required>
-      <button type="submit">Login</button>
-    </form>
-    <a href="register.html">Create Account</a>
-  </div>
+<div class="box" id="roleBox">
+  <h2>Select Role</h2>
+  <button onclick="selectRole('doctor')">Doctor</button>
+  <button onclick="selectRole('patient')">Patient</button>
+</div>
 
-  <script>
-    let selectedRole = null;
+<div class="box" id="loginBox" style="display:none;">
+  <h2 id="loginTitle">Login</h2>
+  <form onsubmit="return loginUser()">
+    <input type="text" id="username" placeholder="Enter Username" required>
+    <input type="password" id="password" placeholder="Enter Password" required>
+    <button type="submit">Login</button>
+  </form>
+  <button onclick="goBack()">Back</button>
+</div>
 
-    function selectRole(role) {
-      selectedRole = role;
-      document.getElementById('selectionBox').style.display = 'none';
-      document.getElementById('loginBox').style.display = 'block';
-      document.getElementById('loginTitle').textContent =
-        role === 'doctor' ? 'Doctor Login' : 'Patient Login';
-    }
+<script>
+  let selectedRole = null;
 
-    function loginUser() {
-      // Placeholder logic - any username/password works for demo
-      if (selectedRole === 'doctor') {
-        window.location.href = 'doctor_dashboard.html';
-      } else if (selectedRole === 'patient') {
-        window.location.href = 'patient_dashboard.html';
+  // Initialize sample database if not present
+  if (!localStorage.getItem("doctors")) {
+    const doctors = [
+      { username: "dr_asharma", name: "Dr. A. Sharma", password: "doc123", patients: ["ananya","rohit","sneha","karan"] },
+      { username: "dr_bverma", name: "Dr. B. Verma", password: "doc123", patients: ["tanya","arjun","ishita","raj"] },
+      { username: "dr_cdas", name: "Dr. C. Das", password: "doc123", patients: ["simran","ritika","aditya","mehul"] },
+      { username: "dr_dreddy", name: "Dr. D. Reddy", password: "doc123", patients: ["priya","kavya","deepak","ira"] },
+      { username: "dr_enair", name: "Dr. E. Nair", password: "doc123", patients: ["aryan","meera","harshit","anvi"] }
+    ];
+
+    const patients = [
+      { username: "ananya", name: "Ananya Singh", password: "pat123", doctorUsername: "dr_asharma" },
+      { username: "rohit", name: "Rohit Kumar", password: "pat123", doctorUsername: "dr_asharma" },
+      { username: "sneha", name: "Sneha Patel", password: "pat123", doctorUsername: "dr_asharma" },
+      { username: "karan", name: "Karan Mehta", password: "pat123", doctorUsername: "dr_asharma" },
+      { username: "tanya", name: "Tanya Roy", password: "pat123", doctorUsername: "dr_bverma" },
+      { username: "arjun", name: "Arjun Das", password: "pat123", doctorUsername: "dr_bverma" },
+      { username: "ishita", name: "Ishita Sen", password: "pat123", doctorUsername: "dr_bverma" },
+      { username: "raj", name: "Raj Malhotra", password: "pat123", doctorUsername: "dr_bverma" },
+      { username: "simran", name: "Simran Gupta", password: "pat123", doctorUsername: "dr_cdas" },
+      { username: "ritika", name: "Ritika Das", password: "pat123", doctorUsername: "dr_cdas" },
+      { username: "aditya", name: "Aditya Mohanty", password: "pat123", doctorUsername: "dr_cdas" },
+      { username: "mehul", name: "Mehul Shah", password: "pat123", doctorUsername: "dr_cdas" },
+      { username: "priya", name: "Priya Reddy", password: "pat123", doctorUsername: "dr_dreddy" },
+      { username: "kavya", name: "Kavya Nair", password: "pat123", doctorUsername: "dr_dreddy" },
+      { username: "deepak", name: "Deepak Joshi", password: "pat123", doctorUsername: "dr_dreddy" },
+      { username: "ira", name: "Ira Kapoor", password: "pat123", doctorUsername: "dr_dreddy" },
+      { username: "aryan", name: "Aryan Singh", password: "pat123", doctorUsername: "dr_enair" },
+      { username: "meera", name: "Meera Nair", password: "pat123", doctorUsername: "dr_enair" },
+      { username: "harshit", name: "Harshit Patel", password: "pat123", doctorUsername: "dr_enair" },
+      { username: "anvi", name: "Anvi Rao", password: "pat123", doctorUsername: "dr_enair" }
+    ];
+
+    localStorage.setItem("doctors", JSON.stringify(doctors));
+    localStorage.setItem("patients", JSON.stringify(patients));
+    localStorage.setItem("consentRequests", JSON.stringify([]));
+  }
+
+  function selectRole(role) {
+    selectedRole = role;
+    document.getElementById('roleBox').style.display = 'none';
+    document.getElementById('loginBox').style.display = 'block';
+    document.getElementById('loginTitle').textContent = role === 'doctor' ? 'Doctor Login' : 'Patient Login';
+  }
+
+  function goBack() {
+    selectedRole = null;
+    document.getElementById('roleBox').style.display = 'block';
+    document.getElementById('loginBox').style.display = 'none';
+  }
+
+  function loginUser() {
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (!selectedRole) { alert("Please select Doctor or Patient first."); return false; }
+
+    if (selectedRole === "doctor") {
+      const doctors = JSON.parse(localStorage.getItem("doctors")) || [];
+      const doctor = doctors.find(d => d.username === username && d.password === password);
+      if (doctor) {
+        localStorage.setItem("currentUser", JSON.stringify({ role: "doctor", username: doctor.username }));
+        window.location.href = "doctor_dashboard.html";
       } else {
-        alert('Please select Doctor or Patient first.');
+        alert("Invalid username or password for doctor.");
       }
-      return false; // Prevent default form submission
     }
-  </script>
+
+    if (selectedRole === "patient") {
+      const patients = JSON.parse(localStorage.getItem("patients")) || [];
+      const patient = patients.find(p => p.username === username && p.password === password);
+      if (patient) {
+        localStorage.setItem("currentUser", JSON.stringify({ role: "patient", username: patient.username }));
+        window.location.href = "patient_dashboard.html";
+      } else {
+        alert("Invalid username or password for patient.");
+      }
+    }
+
+    return false;
+  }
+</script>
+
 </body>
 </html>
