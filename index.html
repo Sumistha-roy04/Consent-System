@@ -118,5 +118,18 @@
   }
 </script>
 
+<script>
+// Sample procedures database (run once)
+if (!localStorage.getItem("procedures")) {
+  const procedures = [
+    { keyword: "appendix", page: "appendix.html", details: "Appendix removal surgery (Appendectomy) is performed to remove the inflamed appendix. Recovery usually takes 2-4 weeks." },
+    { keyword: "knee", page: "knee.html", details: "Knee replacement surgery is performed to replace damaged knee joints with prosthetics. Recovery may take 6-12 weeks." },
+    { keyword: "cataract", page: "cataract.html", details: "Cataract surgery removes the cloudy lens of the eye and replaces it with an artificial one. Vision typically improves within a few days." }
+  ];
+  localStorage.setItem("procedures", JSON.stringify(procedures));
+}
+</script>
+
+
 </body>
 </html>
